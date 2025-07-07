@@ -1,11 +1,15 @@
-import { getDb } from './cosmosdb.js';
+const API_URL = import.meta.env.VITE_API_URL;
 
-export async function createUser(user: any) {
-  const db = await getDb();
-  return db.collection('users').insertOne(user);
+export async function fetchUser(email: string) {
+  const res = await fetch(`${API_URL}/api/users/${email}`);
+  return res.json();
 }
 
-export async function findUserByEmail(email: string) {
-  const db = await getDb();
-  return db.collection('users').findOne({ email });
+export async function createUser(user: any) {
+  const res = await fetch(`${API_URL}/api/users`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(user),
+  });
+  return res.json();
 }
